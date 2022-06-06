@@ -6,6 +6,7 @@ import Register from "../views/Register.vue";
 import Login from "../views/Login.vue";
 import ForgotPassword from "../views/ForgotPassword.vue";
 import Profile from "../views/Profile.vue";
+import Post from "../views/Post.vue";
 
 Vue.use(VueRouter);
 
@@ -58,6 +59,14 @@ const routes = [
       title: "Profile"
     }
   },
+  {
+    path: "/post",
+    name: "Post",
+    component: Post,
+    meta:{
+      title: "Post"
+    }
+},
  
 ];
 

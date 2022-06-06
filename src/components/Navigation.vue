@@ -52,7 +52,7 @@
         <v-tabs centered
           ><v-tab :to="{ name: 'Home' }">Home</v-tab>
           <v-tab :to="{ name: 'Blogs' }">Blogs</v-tab>
-          <v-tab to="#">Post</v-tab></v-tabs
+          <v-tab :to="{ name: 'Post' }">Post</v-tab></v-tabs
         >
       </template>
     </v-app-bar>
