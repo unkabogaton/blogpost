@@ -1,60 +1,85 @@
 <template>
   <div class="register">
-    <h3>Register</h3>
-    <br />
-    Already have an account?
-    <router-link :to="{ name: 'Login' }">Login</router-link>
-    <v-form ref="form" v-model="valid" lazy-validation>
-      <v-text-field
-        v-model="firstName"
-        :rules="nameRules1"
-        label="First Name"
-        required
-      ></v-text-field>
-      <v-text-field
-        v-model="lastName"
-        :rules="nameRules2"
-        label="Last Name"
-        required
-      ></v-text-field>
-      <v-text-field
-        v-model="username"
-        :rules="usernameRules"
-        label="Username"
-        required
-      ></v-text-field>
+    <v-card
+      elevation="2"
+      shaped
+      max-width="500"
+      class="mx-auto pa-5 text-center mt-7"
+    >
+      <h2>Register</h2>
+      <br />
+      Already have an account?
+      <router-link :to="{ name: 'Login' }">Login</router-link>
+      <br />
+      <br />
+      <v-form ref="form" v-model="valid" lazy-validation>
+        <v-text-field
+          autofocus
+          v-model="firstName"
+          :rules="nameRules1"
+          label="First Name"
+          required
+          filled
+          rounded
+          dense
+        ></v-text-field>
+        <v-text-field
+          v-model="lastName"
+          :rules="nameRules2"
+          label="Last Name"
+          required
+          filled
+          rounded
+          dense
+        ></v-text-field>
+        <v-text-field
+          v-model="username"
+          :rules="usernameRules"
+          label="Username"
+          required
+          filled
+          rounded
+          dense
+        ></v-text-field>
 
-      <v-text-field
-        v-model="email"
-        :rules="emailRules"
-        label="E-mail"
-        required
-      ></v-text-field>
+        <v-text-field
+          v-model="email"
+          :rules="emailRules"
+          label="E-mail"
+          required
+          filled
+          rounded
+          dense
+        ></v-text-field>
 
-      <v-text-field
-        v-model="password"
-        :rules="[(v) => !!v || 'Password is required']"
-        label="Password"
-        required
-        :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-        :type="show1 ? 'text' : 'password'"
-        name="input-10-1"
-        hint="At least 8 characters"
-        counter
-        @click:append="show1 = !show1"
-      ></v-text-field>
+        <v-text-field
+          v-model="password"
+          :rules="[(v) => !!v || 'Password is required']"
+          label="Password"
+          required
+          filled
+          rounded
+          dense
+          :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+          :type="show1 ? 'text' : 'password'"
+          name="input-10-1"
+          hint="At least 8 characters"
+          counter
+          @click:append="show1 = !show1"
+        ></v-text-field>
 
-      <v-checkbox
-        v-model="checkbox"
-        :rules="[(v) => !!v || 'You must agree to continue!']"
-        label="Do you agree to terms and conditions?"
-        required
-      ></v-checkbox>
+        <v-checkbox
+          v-model="checkbox"
+          :rules="[(v) => !!v || 'You must agree to continue!']"
+          label="Do you agree to terms and conditions?"
+          required
+        ></v-checkbox>
 
-      <v-btn color="warning" :disabled="!valid" @click.prevent="register">
-        Sign up
-      </v-btn>
-    </v-form>
+        <v-btn color="warning" :disabled="!valid" @click.prevent="register">
+          Sign up
+        </v-btn>
+      </v-form>
+    </v-card>
   </div>
 </template>
 

@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    <v-btn @click="logout">Logout</v-btn>
     <v-card
       class="mx-auto my-3"
       max-width="344"
@@ -47,9 +46,6 @@
 </template>
 
 <script>
-import firebase from "firebase/app";
-import "firebase/auth";
-
 export default {
   name: "Home",
   components: {},
@@ -63,10 +59,6 @@ export default {
       return this.$store.state.sampleBlogCards;
     },
   },
-  methods: {
-    logout() {
-      firebase.auth().signOut();
-    },
-  },
+  methods: {},
 };
 </script>

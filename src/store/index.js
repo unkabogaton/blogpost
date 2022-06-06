@@ -8,6 +8,10 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    selectors:[
+      {title: "Login", linkName: "Login"},
+      {title: "Register", linkName: "Register"},
+    ],
     sampleBlogCards: [
       {
         blogTitle: "Blog 1",
@@ -49,6 +53,15 @@ export default new Vuex.Store({
     updateUser(state, payload){
       state.user = payload
     },
+    changeFirstName(state, payload) {
+      state.profileFirstName = payload;
+    },
+    changeLastName(state, payload) {
+      state.profileLastName = payload;
+    },
+    changeUsername(state, payload) {
+      state.profileUsername = payload;
+    },
   },
   actions: {
     async getCurrentUser({commit}) {
@@ -56,6 +69,15 @@ export default new Vuex.Store({
       const dbResults = await dataBase.get();
       commit("setProfileInfo", dbResults);
       commit("setProfileInitials");
+  },
+  async updateUserSettings({commit,state}){
+    const dataBase = await db.collection("users").doc(state.profileId);
+    await dataBase.update({
+      firstName: state.profileFirstName,
+      lastName: state.profileLastName,
+      username: state.profileUsername,
+    });
+    commit("setProfileInitials");
   },
   },
   modules: {

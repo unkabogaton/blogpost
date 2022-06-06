@@ -1,21 +1,35 @@
 <template>
   <div class="forgot-password">
-    <h3>Forgot Password</h3>
-    <br />
-    Back to
-    <router-link :to="{ name: 'Login' }">Login</router-link>
-    <br />
-    <v-form ref="form" v-model="valid" lazy-validation>
-      <v-text-field
-        v-model="email"
-        :rules="emailRules"
-        label="E-mail"
-        required
-      ></v-text-field>
-      <v-btn color="warning" :disabled="!valid" @click="resetPassword">
-        Reset
-      </v-btn>
-    </v-form>
+    <v-card
+      elevation="2"
+      shaped
+      max-width="500"
+      class="mx-auto pa-5 text-center mt-7"
+    >
+      <h2>Forgot Password</h2>
+      <br />
+      Have an accoount? Back to
+      <router-link :to="{ name: 'Login' }">Login</router-link>
+      <br />
+      <br />
+      <v-form ref="form" v-model="valid" lazy-validation>
+        <v-text-field
+          autofocus
+          v-model="email"
+          :rules="emailRules"
+          label="E-mail"
+          required
+          filled
+          rounded
+          dense
+        ></v-text-field>
+        <br />
+        <v-btn color="warning" :disabled="!valid" @click="resetPassword">
+          Reset
+        </v-btn>
+        <br />
+      </v-form>
+    </v-card>
   </div>
 </template>
 

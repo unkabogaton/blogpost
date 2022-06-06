@@ -1,6 +1,9 @@
 <template>
   <v-app>
     <Navigation />
+    <v-sheet
+      ><v-container><router-view /></v-container
+    ></v-sheet>
   </v-app>
 </template>
 
