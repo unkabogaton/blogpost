@@ -26,6 +26,11 @@ export default new Vuex.Store({
         blogDate: "June 5, 2022",
       },
     ],
+    blogTitle: null,
+    blogPhotoName: null,
+    blogPhotoFileUrl: null,
+    blogPhotoPreview: null,
+    blogHTML: null, 
     editPost: false,
     user: null,
     profileEmail: null,
@@ -36,8 +41,14 @@ export default new Vuex.Store({
     profileInitials: null,
    },
   mutations: {
+    newBlogPost(state, payload){
+      state.blogHTML = payload;
+    },
+    newBlogTitle(state, payload){
+      state.blogTitle = payload;
+    },
     toggleEditPost(state, payload){
-      state.editPost = payload
+      state.editPost = payload;
     },
     setProfileInfo(state,doc){
       state.profileId = doc.id;
