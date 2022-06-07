@@ -86,7 +86,7 @@ export default {
     imageHandler(file, Editor, cursorLocation, resetUploader) {
       const storageRef = firebase.storage().ref();
       const docRef = storageRef.child(
-        `documents/blogPhotos/${file.name}${this.makeId()}`
+        `documents/blogPhotos/${this.makeId()}${file.name}`
       );
       docRef.put(file).on(
         "state_changed",
@@ -122,9 +122,9 @@ export default {
         if (this.$store.state.blogPhotoFileURL) {
           const storageRef = firebase.storage().ref();
           const docRef = storageRef.child(
-            `documents/blogCoverPhotos/${
+            `documents/blogCoverPhotos/${this.makeId()}${
               this.blogCoverPhotoName
-            }${this.makeId()}`
+            }`
           );
           docRef.put(this.$store.state.blogPhotoFileURL).on(
             "state_changed",
