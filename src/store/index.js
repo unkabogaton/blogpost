@@ -12,22 +12,11 @@ export default new Vuex.Store({
       {title: "Login", linkName: "Login"},
       {title: "Register", linkName: "Register"},
     ],
-    sampleBlogCards: [
-      {
-        blogTitle: "Blog 1",
-        blogCoverPhoto:
-          "https://smaller-pictures.appspot.com/images/dreamstime_xxl_65780868_small.jpg",
-        blogDate: "June 6, 2022",
-      },
-      {
-        blogTitle: "Blog 2",
-        blogCoverPhoto:
-          "https://media.istockphoto.com/photos/start-small-think-big-picture-id1333922093?b=1&k=20&m=1333922093&s=170667a&w=0&h=rKXAeHZXtmYij0FT9W88dJZVSoMU8Sy8rf9u5jufpN8=",
-        blogDate: "June 5, 2022",
-      },
-    ],
+    blogPosts: [],
+    postloaded: null,
     blogTitle: null,
     blogPhotoName: null,
+    blogPhotoFile: null,
     blogPhotoFileUrl: null,
     blogPhotoPreview: null,
     blogHTML: null, 
@@ -49,6 +38,9 @@ export default new Vuex.Store({
     },
     fileNameChange(state, payload){
       state.blogPhotoName = payload;
+    },
+    fileChange(state, payload){
+      state.blogPhotoFile = payload
     },
     createFileURL(state, payload){
       state.blogPhotoFileURL = payload;
@@ -96,6 +88,24 @@ export default new Vuex.Store({
     });
     commit("setProfileInitials");
   },
+  async getPost({state}){
+    const dataBase = await db.collection('blogPosts').orderBy('date','desc');
+    const dbResults = await dataBase.get();
+    dbResults.forEach((doc) => {
+      if(!state.blogPosts.some(post=>post.blogID === doc.id)){
+        const data = {
+          blogID: doc.data().blogID,
+          blogHTML: doc.data().blogHTML,
+          blogTitle: doc.data().blogTitle,
+          blogCoverPhoto: doc.data().blogCoverPhoto,
+          blogDate: doc.data().date,
+        };
+        state.blogPosts.push(data);
+      }
+    });
+    state.postloaded = true;
+    console.log(state.blogPosts);
+  }
   },
   modules: {
   }

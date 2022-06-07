@@ -59,6 +59,9 @@ export default {
     blogCoverPhotoName() {
       return this.$store.state.blogPhotoName;
     },
+    blogPhotoFile() {
+      return this.$store.state.blogPhotoFile;
+    },
     blogTitle: {
       get() {
         return this.$store.state.blogTitle;
@@ -79,8 +82,8 @@ export default {
   methods: {
     fileChange() {
       this.file = this.$refs.blogPhoto.files[0];
-      const fileName = this.file.name;
-      this.$store.commit("fileNameChange", fileName);
+      this.$store.commit("fileNameChange", this.file.name);
+      this.$store.commit("fileChange", this.file);
       this.$store.commit("createFileURL", URL.createObjectURL(this.file));
     },
     imageHandler(file, Editor, cursorLocation, resetUploader) {
@@ -126,7 +129,7 @@ export default {
               this.blogCoverPhotoName
             }`
           );
-          docRef.put(this.$store.state.blogPhotoFileURL).on(
+          docRef.put(this.$store.state.blogPhotoFile).on(
             "state_changed",
             (snapshot) => {
               console.log(snapshot);
