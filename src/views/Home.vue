@@ -5,6 +5,8 @@
       max-width="344"
       v-for="blog in blogPosts"
       :key="blog.blogID"
+      router
+      :to="{ name: 'ViewBlog', params: { id: blog.blogID } }"
     >
       <v-img :src="blog.blogCoverPhoto" height="200px"></v-img>
 

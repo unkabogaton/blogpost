@@ -18,7 +18,6 @@ export default {
   }),
   async created() {
     this.$store.dispatch("getPost");
-    console.log("akdnn");
   },
 };
 </script>

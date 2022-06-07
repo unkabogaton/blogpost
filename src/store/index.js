@@ -13,6 +13,8 @@ export default new Vuex.Store({
       {title: "Register", linkName: "Register"},
     ],
     blogPosts: [],
+    currentBlogID: null,
+    currentBlogPost: null,
     postloaded: null,
     blogTitle: null,
     blogPhotoName: null,
@@ -57,7 +59,6 @@ export default new Vuex.Store({
     },
     setProfileInitials(state){
       state.profileInitials = state.profileFirstName[0] + state.profileLastName[0];
-      console.log(state.profileInitials)
     },
     updateUser(state, payload){
       state.user = payload
@@ -71,6 +72,9 @@ export default new Vuex.Store({
     changeUsername(state, payload) {
       state.profileUsername = payload;
     },
+    filterBlogPost(state, id){
+      state.blogPosts = state.blogPosts.filter(post => post.blogID !== id);
+    }
   },
   actions: {
     async getCurrentUser({commit}) {
@@ -123,6 +127,31 @@ export default new Vuex.Store({
     state.postloaded = true;
     console.log("updated")
   },
+  async currentPost({state}, id){
+    const dataBase = await db.collection("blogPosts").where("blogID", "==", id);
+    await dataBase.get()
+    .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {          
+        state.currentBlogPost = {
+          blogID: doc.data().blogID,
+          blogHTML: doc.data().blogHTML,
+          blogTitle: doc.data().blogTitle,
+          blogCoverPhoto: doc.data().blogCoverPhoto,
+          blogDate: doc.data().date
+        } 
+        console.log(state.currentBlogPost);
+        });
+    })
+    .catch((error) => {
+        console.log("Error getting documents: ", error);
+    });
+  },
+  async deleteBlog({commit}, id){
+    const getPost = await db.collection("blogPosts").doc(id);
+    await getPost.delete();
+    commit("filterBlogPost", id);
+    console.log("sucess")
+  }
   },
   modules: {
   }

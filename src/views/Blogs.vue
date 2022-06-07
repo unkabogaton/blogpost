@@ -27,7 +27,7 @@
       </v-list-item>
 
       <v-card-actions v-show="editPost">
-        <v-btn outlined rounded text>
+        <v-btn outlined rounded text @click="deleteBlog(blog.blogID)">
           delete
         </v-btn>
         <v-btn outlined rounded text>
@@ -55,6 +55,11 @@ export default {
       set(payload) {
         this.$store.commit("toggleEditPost", payload);
       },
+    },
+  },
+  methods: {
+    deleteBlog(id) {
+      this.$store.dispatch("deleteBlog", id);
     },
   },
 };
