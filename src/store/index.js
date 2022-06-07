@@ -79,7 +79,7 @@ export default new Vuex.Store({
       commit("setProfileInfo", dbResults);
       commit("setProfileInitials");
   },
-  async updateUserSettings({commit,state}){
+  async updateUserSettings({commit, state}){
     const dataBase = await db.collection("users").doc(state.profileId);
     await dataBase.update({
       firstName: state.profileFirstName,
@@ -104,8 +104,25 @@ export default new Vuex.Store({
       }
     });
     state.postloaded = true;
-    console.log(state.blogPosts);
-  }
+  },
+  async getNewPost({state}){
+    const dataBase = await db.collection('blogPosts').orderBy('date','desc').limit(1);
+    const dbResults = await dataBase.get();
+    dbResults.forEach((doc) => {
+      if(!state.blogPosts.some(post=>post.blogID === doc.id)){
+        const data = {
+          blogID: doc.data().blogID,
+          blogHTML: doc.data().blogHTML,
+          blogTitle: doc.data().blogTitle,
+          blogCoverPhoto: doc.data().blogCoverPhoto,
+          blogDate: doc.data().date,
+        };
+        state.blogPosts.push(data);
+      }
+    });
+    state.postloaded = true;
+    console.log("updated")
+  },
   },
   modules: {
   }

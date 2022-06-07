@@ -16,7 +16,7 @@
           autofocus
           v-model="email"
           :rules="emailRules"
-          label="E-mail"
+          placeholder="E-mail"
           required
           filled
           rounded
@@ -26,7 +26,7 @@
         <v-text-field
           v-model="password"
           :rules="[(v) => !!v || 'Item is required']"
-          label="Password"
+          placeholder="Password"
           required
           :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
           :type="show1 ? 'text' : 'password'"

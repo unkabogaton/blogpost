@@ -16,5 +16,9 @@ export default {
   data: () => ({
     //
   }),
+  async created() {
+    this.$store.dispatch("getPost");
+    console.log("akdnn");
+  },
 };
 </script>

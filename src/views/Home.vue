@@ -3,8 +3,8 @@
     <v-card
       class="mx-auto my-3"
       max-width="344"
-      v-for="blog in sampleBlogCards"
-      :key="blog.blogTitle"
+      v-for="blog in blogPosts"
+      :key="blog.blogID"
     >
       <v-img :src="blog.blogCoverPhoto" height="200px"></v-img>
 
@@ -13,7 +13,7 @@
       </v-card-title>
 
       <v-card-subtitle>
-        {{ blog.blogDate }}
+        {{ new Date(blog.blogDate).toString().split("GMT")[0] }}
       </v-card-subtitle>
 
       <v-card-actions>
@@ -55,8 +55,8 @@ export default {
     };
   },
   computed: {
-    sampleBlogCards() {
-      return this.$store.state.sampleBlogCards;
+    blogPosts() {
+      return this.$store.state.blogPosts;
     },
   },
   methods: {},

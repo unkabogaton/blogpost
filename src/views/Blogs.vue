@@ -5,13 +5,13 @@
       class="mx-auto my-3"
       max-width="344"
       outlined
-      v-for="blog in sampleBlogCards"
-      :key="blog.blogTitle"
+      v-for="blog in blogPosts"
+      :key="blog.blogID"
     >
       <v-list-item three-line>
         <v-list-item-content>
           <div class="text-overline mb-4">
-            {{ blog.blogDate }}
+            {{ new Date(blog.blogDate).toString().split("GMT")[0] }}
           </div>
           <v-list-item-title class="text-h5 mb-1">
             {{ blog.blogTitle }}
@@ -45,8 +45,8 @@ export default {
     return {};
   },
   computed: {
-    sampleBlogCards() {
-      return this.$store.state.sampleBlogCards;
+    blogPosts() {
+      return this.$store.state.blogPosts;
     },
     editPost: {
       get() {

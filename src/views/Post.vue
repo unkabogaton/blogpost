@@ -1,6 +1,5 @@
 <template>
   <div class="post">
-    <input type="text" />
     <v-text-field
       :rules="titleRules"
       placeholder="Blog Title"
@@ -149,7 +148,15 @@ export default {
                 blogTitle: this.blogTitle,
                 date: timestamp,
               });
-              console.log("success");
+              this.$store.dispatch("getNewPost");
+              (this.$store.state.blogTitle = null),
+                (this.$store.state.blogPhotoName = null),
+                (this.$store.state.blogPhotoFile = null),
+                (this.$store.state.blogPhotoFileUrl = null),
+                (this.$store.state.blogPhotoPreview = null),
+                (this.$store.state.blogHTML = null),
+                console.log("success");
+              this.$router.push({ name: "Blogs" });
             }
           );
         }

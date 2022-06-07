@@ -17,7 +17,7 @@
           autofocus
           v-model="firstName"
           :rules="nameRules1"
-          label="First Name"
+          placeholder="First Name"
           required
           filled
           rounded
@@ -26,7 +26,7 @@
         <v-text-field
           v-model="lastName"
           :rules="nameRules2"
-          label="Last Name"
+          placeholder="Last Name"
           required
           filled
           rounded
@@ -35,7 +35,7 @@
         <v-text-field
           v-model="username"
           :rules="usernameRules"
-          label="Username"
+          placeholder="Username"
           required
           filled
           rounded
@@ -45,7 +45,7 @@
         <v-text-field
           v-model="email"
           :rules="emailRules"
-          label="E-mail"
+          placeholder="E-mail"
           required
           filled
           rounded
@@ -55,7 +55,7 @@
         <v-text-field
           v-model="password"
           :rules="[(v) => !!v || 'Password is required']"
-          label="Password"
+          placeholder="Password"
           required
           filled
           rounded
@@ -71,7 +71,7 @@
         <v-checkbox
           v-model="checkbox"
           :rules="[(v) => !!v || 'You must agree to continue!']"
-          label="Do you agree to terms and conditions?"
+          label="I agree to the terms and conditions."
           required
         ></v-checkbox>
 
@@ -134,7 +134,6 @@ export default {
           email: this.email,
         });
         this.$router.push({ name: "Login" });
-        console.log("oye");
         return;
       }
     },

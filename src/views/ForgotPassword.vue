@@ -17,7 +17,7 @@
           autofocus
           v-model="email"
           :rules="emailRules"
-          label="E-mail"
+          placeholder="E-mail"
           required
           filled
           rounded
