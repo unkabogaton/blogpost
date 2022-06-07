@@ -3,6 +3,8 @@
     <v-app-bar
       color="white"
       dense
+      temporary
+      v-show="true"
       v-if="
         $route.name !== 'Login' &&
           $route.name !== 'Register' &&
@@ -50,7 +52,7 @@
       </v-menu>
       <template v-slot:extension>
         <v-tabs centered
-          ><v-tab :to="{ name: 'Home' }">Home</v-tab>
+          ><v-tab :to="{ name: 'Home' }" exact>Home</v-tab>
           <v-tab :to="{ name: 'Blogs' }">Blogs</v-tab>
           <v-tab :to="{ name: 'Post' }">Post</v-tab></v-tabs
         >

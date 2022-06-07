@@ -29,7 +29,8 @@
           @image-added="imageHandler"
         />
       </div>
-      <v-btn>Publish Blog</v-btn>
+      <v-btn @click="uploadBlog">Publish Blog</v-btn>
+      <v-btn router :to="{ name: 'PostPreview' }">Preview</v-btn>
     </v-card>
   </div>
 </template>
@@ -41,6 +42,8 @@ import Quill from "quill";
 window.Quill = Quill;
 const ImageResize = require("quill-image-resize-module").default;
 Quill.register("modules/imageResize", ImageResize);
+import db from "../firebase/firebaseInit";
+
 export default {
   name: "Post",
   data() {
@@ -84,7 +87,9 @@ export default {
     },
     imageHandler(file, Editor, cursorLocation, resetUploader) {
       const storageRef = firebase.storage().ref();
-      const docRef = storageRef.child(`documents/blogPhotos/${file.name}`);
+      const docRef = storageRef.child(
+        `documents/blogPhotos/${file.name}${this.makeId()}`
+      );
       docRef.put(file).on(
         "state_changed",
         (snapshot) => {
@@ -99,6 +104,54 @@ export default {
           resetUploader();
         }
       );
+    },
+    makeId() {
+      const length = 10;
+      var result = "";
+      var characters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      var charactersLength = characters.length;
+      for (var i = 0; i < length; i++) {
+        result += characters.charAt(
+          Math.floor(Math.random() * charactersLength)
+        );
+      }
+      return result;
+    },
+
+    uploadBlog() {
+      if (this.$refs.form.validate()) {
+        if (this.$store.state.blogPhotoFileURL) {
+          const storageRef = firebase.storage().ref();
+          const docRef = storageRef.child(
+            `documents/blogCoverPhotos/${
+              this.blogCoverPhotoName
+            }${this.makeId()}`
+          );
+          docRef.put(this.$store.state.blogPhotoFileURL).on(
+            "state_changed",
+            (snapshot) => {
+              console.log(snapshot);
+            },
+            (err) => {
+              console.log(err);
+            },
+            async () => {
+              const downloadURL = await docRef.getDownloadURL();
+              const timestamp = await Date.now();
+              const dataBase = await db.collection("blogPosts").doc();
+              await dataBase.set({
+                blogID: dataBase.id,
+                blogHTML: this.blogHTML,
+                blogCoverPhoto: downloadURL,
+                blogCoverPhotoName: this.blogCoverPhotoName,
+                blogTitle: this.blogTitle,
+                date: timestamp,
+              });
+            }
+          );
+        }
+      }
     },
   },
 };

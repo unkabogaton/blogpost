@@ -43,7 +43,6 @@ export default new Vuex.Store({
   mutations: {
     updateBlogPost(state, payload){
       state.blogHTML = payload;
-      console.log(state.blogHTML)
     },
     updateBlogTitle(state, payload){
       state.blogTitle = payload;
