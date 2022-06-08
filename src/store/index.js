@@ -19,9 +19,13 @@ export default new Vuex.Store({
     blogTitle: null,
     blogPhotoName: null,
     blogPhotoFile: null,
-    blogPhotoFileUrl: null,
-    blogPhotoPreview: null,
+    blogPhotoFileURL: null,
     blogHTML: null, 
+    editBlogTitle: null,
+    editBlogPhotoName: null,
+    editBlogPhotoFile: null,
+    editBlogPhotoFileURL: null,
+    editBlogHTML: null, 
     editPost: false,
     user: null,
     profileEmail: null,
@@ -46,6 +50,21 @@ export default new Vuex.Store({
     },
     createFileURL(state, payload){
       state.blogPhotoFileURL = payload;
+    },
+    editUpdateBlogPost(state, payload){
+      state.editBlogHTML = payload;
+    },
+    editUpdateBlogTitle(state, payload){
+      state.editBlogTitle = payload;
+    },
+    editFileNameChange(state, payload){
+      state.editBlogPhotoName = payload;
+    },
+    editFileChange(state, payload){
+      state.editBlogPhotoFile = payload
+    },
+    editCreateFileURL(state, payload){
+      state.editBlogPhotoFileURL = payload;
     },
     toggleEditPost(state, payload){
       state.editPost = payload;
@@ -74,6 +93,20 @@ export default new Vuex.Store({
     },
     filterBlogPost(state, id){
       state.blogPosts = state.blogPosts.filter(post => post.blogID !== id);
+    },
+    editBlogState(state,payload){
+      state.editBlogTitle = payload.blogTitle;
+      state.editBlogHTML = payload.blogHTML;
+      state.blogPhotoFileURL = payload.blogCoverPhoto;
+      state.editBlogPhotoName = payload.blogCoverPhotoName;
+    },
+    clearEditBlogState(state){
+      state.editBlogTitle = null;
+      state.editBlogHTML = null;
+      state.editBlogPhotoFileURL = null;
+      state.editBlogPhotoFile = null;
+      state.editBlogPhotoName = null;
+      console.log(state.editBlogPhotoName)
     }
   },
   actions: {
@@ -102,6 +135,7 @@ export default new Vuex.Store({
           blogHTML: doc.data().blogHTML,
           blogTitle: doc.data().blogTitle,
           blogCoverPhoto: doc.data().blogCoverPhoto,
+          blogCoverPhotoName: doc.data().blogCoverPhotoName,
           blogDate: doc.data().date,
         };
         state.blogPosts.push(data);
@@ -119,6 +153,7 @@ export default new Vuex.Store({
           blogHTML: doc.data().blogHTML,
           blogTitle: doc.data().blogTitle,
           blogCoverPhoto: doc.data().blogCoverPhoto,
+          blogCoverPhotoName: doc.data().blogCoverPhotoName,
           blogDate: doc.data().date,
         };
         state.blogPosts.push(data);
@@ -137,6 +172,7 @@ export default new Vuex.Store({
           blogHTML: doc.data().blogHTML,
           blogTitle: doc.data().blogTitle,
           blogCoverPhoto: doc.data().blogCoverPhoto,
+          blogCoverPhotoName: doc.data().blogCoverPhotoName,
           blogDate: doc.data().date
         } 
         console.log(state.currentBlogPost);

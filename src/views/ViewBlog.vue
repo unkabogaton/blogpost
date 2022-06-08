@@ -31,9 +31,7 @@ export default {
   },
   async created() {
     await this.$store.dispatch("currentPost", this.$route.params.id);
-    if (this.currentBlogPost && this.$store.state.currentBlogPost.blogTitle) {
-      this.currentBlogPost = this.$store.state.currentBlogPost;
-    }
+    this.currentBlogPost = this.$store.state.currentBlogPost;
   },
 };
 </script>

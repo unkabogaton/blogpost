@@ -9,6 +9,7 @@ import Profile from "../views/Profile.vue";
 import Post from "../views/Post.vue";
 import PostPreview from "../views/PostPreview.vue";
 import ViewBlog from "../views/ViewBlog.vue";
+import EditPost from "../views/EditPost.vue";
 
 Vue.use(VueRouter);
 
@@ -83,6 +84,14 @@ const routes = [
   component: ViewBlog,
   meta:{
     title: "ViewBlog"
+  }
+},
+{
+  path: "/edit-post/:id",
+  name: "EditPost",
+  component: EditPost,
+  meta:{
+    title: "EditPost"
   }
 },
  

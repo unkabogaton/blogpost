@@ -1,13 +1,13 @@
 <template>
-  <div class="post">
+  <div class="edit-post">
     <v-text-field
       :rules="titleRules"
       placeholder="Blog Title"
-      v-model="blogTitle"
       required
       filled
       rounded
       dense
+      v-model="blogTitle"
     ></v-text-field>
     <h3>Upload Cover Photo</h3>
     <input
@@ -17,8 +17,8 @@
       accept=".png,.jpg,.jpeg"
       @change="fileChange"
     />
-    <v-btn :disabled="!$store.state.blogPhotoFileURL">Preview Photo</v-btn>
-    <span>File Chosen: {{ $store.state.blogPhotoName }}</span>
+    <v-btn :disabled="!$store.state.editBlogPhotoFileURL">Preview Photo</v-btn>
+    <span>File Chosen: {{ $store.state.editBlogPhotoName }}</span>
     <div class="editor">
       <vue-editor
         :editorOptions="editorSettings"
@@ -27,8 +27,8 @@
         @image-added="imageHandler"
       />
     </div>
-    <v-btn @click="uploadBlog">Publish Blog</v-btn>
-    <v-btn router :to="{ name: 'PostPreview' }">Preview Blog</v-btn>
+    <v-btn @click="editBlog">Save Changes</v-btn>
+    <v-btn router :to="{ name: 'PostPreview' }">Preview</v-btn>
   </div>
 </template>
 
@@ -42,7 +42,7 @@ Quill.register("modules/imageResize", ImageResize);
 import db from "../firebase/firebaseInit";
 
 export default {
-  name: "Post",
+  name: "EditPost",
   data() {
     return {
       editorSettings: {
@@ -51,42 +51,47 @@ export default {
         },
       },
       titleRules: [(v) => !!v || "Blog Title is required"],
+      currentBlogPost: {},
       file: null,
+      downloadURL: this.$store.state.editBlogPhotoFile,
     };
+  },
+  async created() {
+    await this.$store.dispatch("currentPost", this.$route.params.id);
+    this.currentBlogPost = this.$store.state.currentBlogPost;
+    this.$store.commit("editBlogState", this.currentBlogPost);
   },
   computed: {
     blogCoverPhotoName() {
-      return this.$store.state.blogPhotoName;
+      return this.$store.state.editBlogPhotoName;
     },
     blogPhotoFile() {
-      return this.$store.state.blogPhotoFile;
+      return this.$store.state.editBlogPhotoFile;
     },
     blogTitle: {
       get() {
-        return this.$store.state.blogTitle;
+        return this.$store.state.editBlogTitle;
       },
       set(payload) {
-        this.$store.commit("updateBlogTitle", payload);
+        this.$store.commit("editUpdateBlogTitle", payload);
       },
     },
     blogHTML: {
       get() {
-        return this.$store.state.blogHTML;
+        return this.$store.state.editBlogHTML;
       },
       set(payload) {
-        this.$store.commit("updateBlogPost", payload);
+        this.$store.commit("editUpdateBlogPost", payload);
       },
     },
-  },
-  created() {
-    this.$store.commit("clearEditBlogState");
   },
   methods: {
     fileChange() {
       this.file = this.$refs.blogPhoto.files[0];
-      this.$store.commit("fileNameChange", this.file.name);
-      this.$store.commit("fileChange", this.file);
-      this.$store.commit("createFileURL", URL.createObjectURL(this.file));
+      this.$store.commit("editFileNameChange", this.file.name);
+      this.$store.commit("editFileChange", this.file);
+      this.$store.commit("editCreateFileURL", URL.createObjectURL(this.file));
+      console.log("changed");
     },
     imageHandler(file, Editor, cursorLocation, resetUploader) {
       const storageRef = firebase.storage().ref();
@@ -122,46 +127,37 @@ export default {
       return result;
     },
 
-    uploadBlog() {
+    async editBlog() {
+      const dataBase = await db
+        .collection("blogPosts")
+        .doc(this.$route.params.id);
       if (this.blogTitle.length !== 0 && this.blogHTML.length !== 0) {
-        if (this.$store.state.blogPhotoFileURL) {
+        if (this.$store.state.editBlogPhotoFile) {
           const storageRef = firebase.storage().ref();
           const docRef = storageRef.child(
             `documents/blogCoverPhotos/${this.makeId()}${
               this.blogCoverPhotoName
             }`
           );
-          docRef.put(this.$store.state.blogPhotoFile).on(
-            "state_changed",
-            (snapshot) => {
-              console.log(snapshot);
-            },
-            (err) => {
-              console.log(err);
-            },
-            async () => {
-              const downloadURL = await docRef.getDownloadURL();
-              const timestamp = await Date.now();
-              const dataBase = await db.collection("blogPosts").doc();
-              await dataBase.set({
-                blogID: dataBase.id,
-                blogHTML: this.blogHTML,
-                blogCoverPhoto: downloadURL,
-                blogCoverPhotoName: this.blogCoverPhotoName,
-                blogTitle: this.blogTitle,
-                date: timestamp,
-              });
-              this.$store.dispatch("getNewPost");
-              this.$store.state.blogTitle = null;
-              this.$store.state.blogPhotoName = null;
-              this.$store.state.blogPhotoFile = null;
-              this.$store.state.blogPhotoFileURL = null;
-              (this.$store.state.blogHTML = null), console.log("success");
-              this.file = null;
-              this.$router.push({ name: "Blogs" });
-            }
-          );
+          docRef.put(this.$store.state.editBlogPhotoFile);
+          this.downloadURL = await docRef.getDownloadURL();
         }
+        await dataBase.update({
+          blogHTML: this.blogHTML,
+          blogCoverPhoto: this.downloadURL,
+          blogCoverPhotoName: this.blogCoverPhotoName,
+          blogTitle: this.blogTitle,
+          dateUpdated: Date.now(),
+        });
+        this.$store.dispatch("getNewPost");
+        this.$store.state.editBlogTitle = null;
+        this.$store.state.editBlogPhotoName = null;
+        this.$store.state.editBlogPhotoFile = null;
+        this.$store.state.editBlogPhotoFileURL = null;
+        this.$store.state.editBlogHTML = null;
+        console.log("success");
+        this.file = null;
+        this.$router.push({ name: "Blogs" });
       }
     },
   },

@@ -7,6 +7,7 @@
       outlined
       v-for="blog in blogPosts"
       :key="blog.blogID"
+      :to="{ name: 'ViewBlog', params: { id: blog.blogID } }"
     >
       <v-list-item three-line>
         <v-list-item-content>
@@ -30,7 +31,13 @@
         <v-btn outlined rounded text @click="deleteBlog(blog.blogID)">
           delete
         </v-btn>
-        <v-btn outlined rounded text>
+        <v-btn
+          outlined
+          rounded
+          text
+          router
+          :to="{ name: 'EditPost', params: { id: blog.blogID } }"
+        >
           edit
         </v-btn>
       </v-card-actions>
